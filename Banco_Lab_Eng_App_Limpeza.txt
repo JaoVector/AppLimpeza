@@ -1,0 +1,176 @@
+-- Database: db_LabEng
+-- DROP DATABASE "db_LabEng";
+CREATE DATABASE "db_LabEng"
+    WITH 
+    OWNER = postgres
+    ENCODING = 'UTF8'
+    LC_COLLATE = 'Portuguese_Brazil.1252'
+    LC_CTYPE = 'Portuguese_Brazil.1252'
+    TABLESPACE = pg_default
+    CONNECTION LIMIT = -1;
+-- Table: public.tbl_disponibilidade
+-- DROP TABLE public.tbl_disponibilidade;
+CREATE TABLE public.tbl_disponibilidade
+(
+    cod_disp integer NOT NULL,
+    data_disp date NOT NULL,
+    hora_disp time without time zone NOT NULL,
+    cod_prestador integer NOT NULL,
+    cod_servico integer NOT NULL,
+    CONSTRAINT pk__tbl_disp__efe6668121a77065 PRIMARY KEY (cod_disp)
+)
+TABLESPACE pg_default;
+ALTER TABLE public.tbl_disponibilidade
+    OWNER to postgres;
+-- Table: public.tbl_endereço
+-- DROP TABLE public."tbl_endereço";
+CREATE TABLE public."tbl_endereço"
+(
+    cep character varying(8) COLLATE pg_catalog."default" NOT NULL,
+    endereco character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    numero integer NOT NULL,
+    bairro character varying(30) COLLATE pg_catalog."default" NOT NULL,
+    estado character varying(2) COLLATE pg_catalog."default" NOT NULL,
+    cidade character varying(30) COLLATE pg_catalog."default" NOT NULL,
+    fk_cod_cliente integer NOT NULL,
+    fk_cod_prestador integer NOT NULL,
+    CONSTRAINT pk__tbl_ende__b26837556e7ab749 PRIMARY KEY (fk_cod_cliente)
+)
+TABLESPACE pg_default;
+ALTER TABLE public."tbl_endereço"
+    OWNER to postgres;
+-- Table: public.tbl_lavagem
+-- DROP TABLE public.tbl_lavagem;
+CREATE TABLE public.tbl_lavagem
+(
+    fk_cod_servico integer NOT NULL,
+    qtd_roupas integer NOT NULL,
+    tipo_roupa character varying(1) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT pk__tbl_lava__1a6a6fafb0353ea3 PRIMARY KEY (fk_cod_servico)
+)
+TABLESPACE pg_default;
+ALTER TABLE public.tbl_lavagem
+    OWNER to postgres;
+-- Table: public.tbl_limpeza_leve
+-- DROP TABLE public.tbl_limpeza_leve;
+CREATE TABLE public.tbl_limpeza_leve
+(
+    fk_cod_servico integer NOT NULL,
+    qtd_quartos integer NOT NULL,
+    qtd_banheiros character varying(1) COLLATE pg_catalog."default" NOT NULL,
+    outros character varying(1) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT pk__tbl_limp__1a6a6fafde9cd68e PRIMARY KEY (fk_cod_servico)
+)
+TABLESPACE pg_default;
+ALTER TABLE public.tbl_limpeza_leve
+    OWNER to postgres;
+
+-- Table: public.tbl_limpeza_pesada
+-- DROP TABLE public.tbl_limpeza_pesada;
+CREATE TABLE public.tbl_limpeza_pesada
+(
+    fk_cod_servico integer NOT NULL,
+    qtd_quartos integer NOT NULL,
+    qtd_banheiros character varying(1) COLLATE pg_catalog."default" NOT NULL,
+    outros character varying(1) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT pk__tbl_limp__1a6a6faf123f2afc PRIMARY KEY (fk_cod_servico)
+)
+TABLESPACE pg_default;
+ALTER TABLE public.tbl_limpeza_pesada
+    OWNER to postgres;
+-- Table: public.tbl_login
+-- DROP TABLE public.tbl_login;
+CREATE TABLE public.tbl_login
+(
+    fk_email character varying(1) COLLATE pg_catalog."default" NOT NULL,
+    fk_senha character varying(12) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT pk__tbl_logi__5f2a3048badebb48 PRIMARY KEY (fk_email, fk_senha)
+)
+TABLESPACE pg_default;
+ALTER TABLE public.tbl_login
+    OWNER to postgres;
+-- Table: public.tbl_menu
+-- DROP TABLE public.tbl_menu;
+
+CREATE TABLE public.tbl_menu
+(
+    cod_servico integer NOT NULL,
+    CONSTRAINT pk__tbl_menu__41b270b4bf094baa PRIMARY KEY (cod_servico)
+)
+TABLESPACE pg_default;
+ALTER TABLE public.tbl_menu
+    OWNER to postgres;
+-- Table: public.tbl_pagamento
+-- DROP TABLE public.tbl_pagamento;
+CREATE TABLE public.tbl_pagamento
+(
+    fk_cpf character varying(11) COLLATE pg_catalog."default" NOT NULL,
+    numero integer NOT NULL,
+    validade date NOT NULL,
+    nome character varying(45) COLLATE pg_catalog."default" NOT NULL,
+    cod_pagamento integer NOT NULL,
+    CONSTRAINT pk__tbl_paga__277492c1cd5fb1ec PRIMARY KEY (cod_pagamento, fk_cpf)
+)
+TABLESPACE pg_default;
+ALTER TABLE public.tbl_pagamento
+    OWNER to postgres;
+-- Table: public.tbl_passar
+-- DROP TABLE public.tbl_passar;
+CREATE TABLE public.tbl_passar
+(
+    fk_cod_servico integer NOT NULL,
+    qtd_roupas integer NOT NULL,
+    tipo_roupa character varying(1) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT pk__tbl_pass__1a6a6faf5303d301 PRIMARY KEY (fk_cod_servico)
+)
+TABLESPACE pg_default;
+ALTER TABLE public.tbl_passar
+    OWNER to postgres;
+-- Table: public.tbl_pedido
+-- DROP TABLE public.tbl_pedido;
+CREATE TABLE public.tbl_pedido
+(
+    cod_pedido integer NOT NULL,
+    data_agenda date NOT NULL,
+    hora_agenda time without time zone NOT NULL,
+    cod_usuario integer NOT NULL,
+    cod_prestador integer NOT NULL,
+    cod_pagamento integer NOT NULL,
+    cod_servico integer NOT NULL,
+    CONSTRAINT pk__tbl_pedi__3392c4934dbbf565 PRIMARY KEY (cod_pedido)
+)
+TABLESPACE pg_default;
+ALTER TABLE public.tbl_pedido
+    OWNER to postgres;
+-- Table: public.tbl_prestador
+-- DROP TABLE public.tbl_prestador;
+CREATE TABLE public.tbl_prestador
+(
+    cpf character varying(11) COLLATE pg_catalog."default" NOT NULL,
+    nome character varying(80) COLLATE pg_catalog."default",
+    data_nasc date,
+    email character varying(1) COLLATE pg_catalog."default" NOT NULL,
+    senha character varying(12) COLLATE pg_catalog."default" NOT NULL,
+    celular integer,
+    cod_prestador integer NOT NULL,
+    CONSTRAINT pk__tbl_pres__bf3a699b3202b285 PRIMARY KEY (cod_prestador, cpf, email, senha)
+)
+TABLESPACE pg_default;
+ALTER TABLE public.tbl_prestador
+    OWNER to postgres;
+-- Table: public.tbl_usuario
+-- DROP TABLE public.tbl_usuario;
+CREATE TABLE public.tbl_usuario
+(
+    cpf character varying(11) COLLATE pg_catalog."default" NOT NULL,
+    nome character varying(80) COLLATE pg_catalog."default",
+    data_nasc date,
+    email character varying(1) COLLATE pg_catalog."default" NOT NULL,
+    senha character varying(12) COLLATE pg_catalog."default" NOT NULL,
+    celular integer,
+    cod_cliente integer NOT NULL,
+    CONSTRAINT pk__tbl_usua__051697822b4eccb8 PRIMARY KEY (cod_cliente, cpf, email, senha)
+)
+TABLESPACE pg_default;
+ALTER TABLE public.tbl_usuario
+    OWNER to postgres;
